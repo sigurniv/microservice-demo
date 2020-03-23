@@ -1,0 +1,9 @@
+server:
+  port: 8092
+
+service:
+  name: "tag"
+
+lastfm:
+  apiKey: "d6f7e7f266c3adece7cb819c80bb769b"
+

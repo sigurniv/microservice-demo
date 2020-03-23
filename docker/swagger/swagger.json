@@ -1,0 +1,116 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Demo artists project API",
+    "description" : "Artists API",
+    "contact" : {
+      "email" : "sigurniv@gmail.com"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version" : "1.0.0"
+  },
+  "servers" : [{
+    "url" : "http://localhost:APP_PORT/api/v1",
+    "description" : "Local server"
+  } ],
+  "tags" : [ {
+    "name" : "artist"
+  } ],
+  "paths" : {
+    "/artist/tags/" : {
+      "get" : {
+        "tags" : [ "artist" ],
+        "summary" : "gets artist tags",
+        "description" : "Get metal genres\n",
+        "operationId" : "getArtistTags",
+        "responses" : {
+          "200" : {
+            "description" : "get artist tags result",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/artists/top/" : {
+      "get" : {
+        "tags" : [ "artist" ],
+        "summary" : "gets top artists",
+        "description" : "Get top artists by tag\n",
+        "operationId" : "getTopArtists",
+        "parameters" : [ {
+          "name" : "tag",
+          "in" : "query",
+          "description" : "Tag name",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Top artist list",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Artist"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Artist" : {
+        "required" : [ "id", "manufacturer", "name", "releaseDate" ],
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "example" : "233363"
+          },
+          "name" : {
+            "type" : "string",
+            "example" : "In Flames"
+          },
+          "image" : {
+            "type" : "string",
+            "example" : "avatars.yandex.net/get-music-content/113160/dae0f8be.p.292687/400x400"
+          },
+          "description" : {
+            "$ref" : "#/components/schemas/ArtistDescription"
+          }
+        }
+      },
+      "ArtistDescription" : {
+        "required" : [ "text" ],
+        "type" : "object",
+        "properties" : {
+          "text" : {
+            "type" : "string",
+            "example" : "ACME Corporation"
+          }
+        }
+      }
+    }
+  }
+}

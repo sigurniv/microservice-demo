@@ -1,0 +1,99 @@
+version: '3.2'
+
+networks:
+  backend-network:
+    driver: bridge
+
+services:
+  nginx:
+    build:
+      context: ./docker/nginx
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "${APP_PORT}:80"
+    depends_on:
+      - gateway
+      - swagger
+    networks:
+      - backend-network
+
+  swagger:
+    build:
+      context: ./docker/swagger
+      dockerfile: Dockerfile
+      args:
+          APP_PORT: "${APP_PORT}"
+    restart: always
+    networks:
+      - backend-network
+
+  tag:
+    build:
+      context: ./service/tag
+      dockerfile: ./Dockerfile
+    restart: always
+    environment:
+      server.port: "8080"
+      nats.uri: "nats://nats:${NATS_PORT}"
+    depends_on:
+      - nats
+    networks:
+      - backend-network
+
+  artist:
+    build:
+      context: ./service/artist
+      dockerfile: ./Dockerfile
+    restart: always
+    environment:
+      server.port: "8080"
+      nats.uri: "nats://nats:${NATS_PORT}"
+    depends_on:
+      - nats
+    networks:
+      - backend-network
+
+  gateway:
+    build:
+      context: ./service/gateway
+      dockerfile: ./Dockerfile
+    restart: always
+    environment:
+      server.port: "8080"
+      nats.uri: "nats://nats:${NATS_PORT}"
+    depends_on:
+      - nats
+      - artist
+      - tag
+      - auth
+    networks:
+      - backend-network
+
+  auth:
+    build:
+      context: ./service/auth
+      dockerfile: ./Dockerfile
+    environment:
+      DB_CONNECTION: sqlite
+      DB_DATABASE: /app/database/database
+      FPM_PORT: 9000
+      FPM_USER: "${USER_ID:-1000}"
+      FPM_GROUP: "${GROUP_ID:-1000}"
+      APP_KEY: '8d2Apqrqo}3Q4ZXEZe]+8UpxBveC/Y'
+      APP_TIMEZONE: 'Europe/Moscow'
+      NATS_HOST: 'nats'
+      NATS_PORT: "${NATS_PORT}"
+      LOG_CHANNEL: 'stdout'
+    command: "php artisan nats:subscribe"
+    depends_on:
+      - nats
+    networks:
+      - backend-network
+
+  nats:
+    image: 'nats'
+    expose:
+      - "${NATS_PORT}"
+    networks:
+      - backend-network
