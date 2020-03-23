@@ -19,4 +19,4 @@ Usage
 docker-compose up --build 
 ```
 * api: http://localhost:8091/api/v1/
-* swagger: http://localhost:8091/swagger
+* swagger: http://localhost:8091/swagger/

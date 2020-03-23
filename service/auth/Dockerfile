@@ -146,9 +146,10 @@ COPY ./docker/scheduler.sh /scripts/scheduler.sh
 COPY ./docker/fpm-entrypoint.sh /fpm-entrypoint.sh
 COPY ./docker/aliases/* /scripts/aliases/
 COPY . /app
+
 RUN chmod 664 /app/database/database
 
-
 WORKDIR /app
+RUN composer install
 ENTRYPOINT []
 CMD []
