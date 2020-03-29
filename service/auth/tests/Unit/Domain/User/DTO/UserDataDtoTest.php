@@ -3,17 +3,17 @@
 namespace Tests\Unit\Domain\User\DTO;
 
 
-use App\Domain\User\DTO\UserData;
+use App\Domain\User\DTO\UserDataDto;
 use App\Http\Exception\ValidationException;
 use Illuminate\Http\Request;
 use Tests\TestCase;
 
-class UserDataTest extends TestCase
+class UserDataDtoTest extends TestCase
 {
-    public function testConstructor()
+    public function testConstructorMakesInstance()
     {
-        $userData = new UserData('test@gmail.com', '123');
-        $this->assertInstanceOf(UserData::class, $userData);
+        $userData = new UserDataDto('test@gmail.com', '123');
+        $this->assertInstanceOf(UserDataDto::class, $userData);
     }
 
     /**
@@ -31,8 +31,8 @@ class UserDataTest extends TestCase
             $this->expectException(ValidationException::class);
         }
 
-        $userData = UserData::fromRequest($request);
-        $this->assertInstanceOf(UserData::class, $userData);
+        $userData = UserDataDto::fromRequest($request);
+        $this->assertInstanceOf(UserDataDto::class, $userData);
     }
 
     public function requestDataProvider()

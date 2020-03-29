@@ -4,7 +4,7 @@ namespace Tests\Unit\Domain\User\Action;
 
 
 use App\Domain\User\Action\FindUserByEmailAction;
-use App\Domain\User\DTO\UserData;
+use App\Domain\User\DTO\UserDataDto;
 use App\Domain\User\Repository\IUserRepository;
 use App\Domain\User\Model\User;
 use Illuminate\Support\Facades\Hash;
@@ -29,7 +29,7 @@ class FindUserByEmailActionTest extends MockeryDefaultTestCase
         $user     = new User(['email' => 'email', 'password' => Hash::make('213')]);
         $this->givenUserRepositoryFindByEmailReturnsUser($email, $user);
 
-        $userData = new UserData($email, $password);
+        $userData = new UserDataDto($email, $password);
         $action = $this->getFindUserAction();
         $result = $action->handle($userData);
 
@@ -43,7 +43,7 @@ class FindUserByEmailActionTest extends MockeryDefaultTestCase
         $user     = new User(['email' => 'test', 'password' => Hash::make($password)]);
         $this->givenUserRepositoryFindByEmailReturnsUser($email, $user);
 
-        $userData = new UserData($email, $password);
+        $userData = new UserDataDto($email, $password);
         $action = $this->getFindUserAction();
         $result = $action->handle($userData);
 

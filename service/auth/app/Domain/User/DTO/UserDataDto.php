@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Webmozart\Assert\Assert;
 
-class UserData
+class UserDataDto
 {
     public $email;
     public $password;
@@ -29,12 +29,21 @@ class UserData
 
     /**
      * @param Request $request
-     * @return UserData
+     * @return UserDataDto
      * @throws ValidationException
      */
-    public static function fromRequest(Request $request): UserData
+    public static function fromRequest(Request $request): UserDataDto
     {
-        return new UserData($request->get('email'), $request->get('password'));
+        $email = $request->get('email', '');
+        $email = is_null($email) ? '' : $email;
+
+        $password = $request->get('password', '');
+        $password = is_null($password) ? '' : $password;
+
+        return new UserDataDto(
+            $email,
+            $password
+        );
     }
 
     /**

@@ -3,9 +3,9 @@
 namespace Tests\Feature\Api\Auth;
 
 
-use App\Domain\User\Action\FindUserByEmailAction;
 use App\Domain\User\Action\FindUserByTokenAction;
 use App\Domain\User\Model\User;
+use App\Infrastructure\Exception\ErrorMessageException;
 use Mockery\MockInterface;
 use Tests\MockeryDefaultTestCase;
 
@@ -13,9 +13,7 @@ class GetUserTest extends MockeryDefaultTestCase
 {
     public function testGetTokenValidatesInput()
     {
-        $token = '';
-
-        $response = $this->json('GET', '/api/v1/auth/user', ['token' => $token]);
+        $response = $this->json('GET', '/api/v1/auth/user', ['token' => '']);
 
         $response
             ->assertStatus(422)
@@ -30,7 +28,7 @@ class GetUserTest extends MockeryDefaultTestCase
         $token = 'token';
         $this->mock(FindUserByTokenAction::class, function ($mock) {
             /** @var $mock MockInterface */
-            $mock->shouldReceive('handle')->once()->andThrow(new \Exception());
+            $mock->shouldReceive('handle')->once()->andThrow(new ErrorMessageException());
         });
 
         $response = $this->json('GET', '/api/v1/auth/user', ['token' => $token]);
@@ -61,5 +59,4 @@ class GetUserTest extends MockeryDefaultTestCase
             ->assertStatus(200)
             ->assertJson($user->toArray());
     }
-
 }

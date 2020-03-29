@@ -3,7 +3,7 @@
 namespace App\Domain\User\Action;
 
 
-use App\Domain\Auth\DTO\TokenData;
+use App\Domain\Auth\DTO\TokenDataDto;
 use App\Domain\User\Model\User;
 use App\Domain\User\Repository\IUserAuthRepository;
 use App\Infrastructure\Exception\ErrorMessageException;
@@ -19,11 +19,11 @@ class FindUserByTokenAction
     }
 
     /**
-     * @param TokenData $tokenData
+     * @param TokenDataDto $tokenData
      * @return User
      * @throws ErrorMessageException
      */
-    public function handle(TokenData $tokenData): User
+    public function handle(TokenDataDto $tokenData): User
     {
         $userAuth = $this->userAuthRepository->findByToken($tokenData->token);
         if (!$userAuth || $userAuth->token_expires_at->isBefore(new Carbon())) {

@@ -2,6 +2,13 @@
 
 namespace App\Exceptions;
 
+use App\Http\ApiErrResponse;
+use App\Http\ApiResponse;
+use App\Http\ApiResponseError;
+use App\Http\Exception\ValidationException;
+use App\Http\Response\IResponder;
+use App\Http\Response\Responder;
+use App\Infrastructure\Exception\ErrorMessageException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -29,7 +36,7 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  \Throwable  $exception
+     * @param  \Throwable $exception
      * @return void
      *
      * @throws \Exception
@@ -42,14 +49,32 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Throwable  $exception
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Throwable $exception
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @throws \Throwable
      */
     public function render($request, Throwable $exception)
     {
-        return parent::render($request, $exception);
+        /** @var IResponder $responder */
+        $responder = resolve(Responder::class);
+
+        switch (get_class($exception)) {
+            case ValidationException::class:
+                /** @var ValidationException $exception */
+                $error = $exception->getValidator()->errors()->first();
+                return $responder->respond(
+                    (new ApiResponse())->setError(new ApiResponseError($error, 422))
+                );
+
+            case ErrorMessageException::class:
+                return $responder->respond(
+                    new ApiErrResponse(new ApiResponseError(trans($exception->getMessage()), $exception->getCode()))
+                );
+
+            default:
+                return parent::render($request, $exception);
+        }
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Domain\Auth\Action;
 
 
-use App\Domain\Auth\DTO\RefreshTokenData;
+use App\Domain\Auth\DTO\RefreshTokenDataDto;
 use App\Domain\User\Action\FindUserByTokenAction;
 use App\Domain\User\Model\User;
 use App\Domain\User\Model\UserAuth;
@@ -29,11 +29,11 @@ class RefreshTokenAction
 
     /**
      * @param User $user
-     * @param RefreshTokenData $refreshTokenData
+     * @param RefreshTokenDataDto $refreshTokenData
      * @return UserAuth
      * @throws ErrorMessageException
      */
-    public function handle(RefreshTokenData $refreshTokenData)
+    public function handle(RefreshTokenDataDto $refreshTokenData)
     {
         $userAuths = $this->userAuthRepository->getByToken($refreshTokenData->token);
 

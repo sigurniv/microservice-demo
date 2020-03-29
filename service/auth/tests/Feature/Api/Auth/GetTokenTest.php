@@ -9,7 +9,7 @@ class GetTokenTest extends MockeryDefaultTestCase
 {
     public function testGetTokenValidatesInput()
     {
-        $email    = 'email@test.com';
+        $email    = 'email';
         $password = 'password';
 
         $response = $this->json('GET', '/api/v1/auth/token', ['email' => $email, 'password' => $password]);

@@ -7,29 +7,32 @@ use App\Http\Exception\ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class TokenData
+class RefreshTokenDataDto extends TokenDataDto
 {
     public $token;
+    public $refreshToken;
 
     /**
-     * TokenData constructor.
+     * RefreshTokenData constructor.
      * @param string $token
+     * @param string $refreshToken
      * @throws ValidationException
      */
-    public function __construct(string $token)
+    public function __construct(string $token, string $refreshToken)
     {
-        static::validateInput(['token' => $token]);
-        $this->token = $token;
+        parent::__construct($token);
+        static::validateInput(['refreshToken' => $refreshToken]);
+        $this->refreshToken = $refreshToken;
     }
 
     /**
      * @param Request $request
-     * @return TokenData
+     * @return RefreshTokenDataDto
      * @throws ValidationException
      */
     public static function fromRequest(Request $request)
     {
-        return new TokenData($request->get('token'));
+        return new RefreshTokenDataDto($request->get('token'), $request->get('refreshToken'));
     }
 
     /**
@@ -39,7 +42,7 @@ class TokenData
     protected static function validateInput(array $input)
     {
         $validator = Validator::make($input, [
-            'token' => 'required|string',
+            'refreshToken' => 'required|string',
         ]);
 
         if ($validator->fails()) {

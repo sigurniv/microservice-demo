@@ -4,7 +4,7 @@ namespace App\Domain\Auth\Action;
 
 
 use App\Domain\User\Action\FindUserByEmailAction;
-use App\Domain\User\DTO\UserData;
+use App\Domain\User\DTO\UserDataDto;
 use App\Domain\User\Model\UserAuth;
 use App\Infrastructure\Exception\ErrorMessageException;
 use Illuminate\Http\Response;
@@ -24,11 +24,11 @@ class GetTokenAction
     }
 
     /**
-     * @param UserData $userData
+     * @param UserDataDto $userData
      * @return UserAuth
      * @throws ErrorMessageException
      */
-    public function handle(UserData $userData): UserAuth
+    public function handle(UserDataDto $userData): UserAuth
     {
         $user = $this->findUserAction->handle($userData);
         if (!$user) {

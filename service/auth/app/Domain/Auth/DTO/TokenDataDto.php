@@ -5,34 +5,35 @@ namespace App\Domain\Auth\DTO;
 
 use App\Http\Exception\ValidationException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 
-class RefreshTokenData extends TokenData
+class TokenDataDto
 {
     public $token;
-    public $refreshToken;
 
     /**
-     * RefreshTokenData constructor.
+     * TokenData constructor.
      * @param string $token
-     * @param string $refreshToken
      * @throws ValidationException
      */
-    public function __construct(string $token, string $refreshToken)
+    public function __construct(string $token)
     {
-        parent::__construct($token);
-        static::validateInput(['refreshToken' => $refreshToken]);
-        $this->refreshToken = $refreshToken;
+        static::validateInput(['token' => $token]);
+        $this->token = $token;
     }
 
     /**
      * @param Request $request
-     * @return RefreshTokenData
+     * @return TokenDataDto
      * @throws ValidationException
      */
     public static function fromRequest(Request $request)
     {
-        return new RefreshTokenData($request->get('token'), $request->get('refreshToken'));
+        $token = $request->get('token', '');
+        $token = empty($token) ? '' : $token;
+
+        return new TokenDataDto($token);
     }
 
     /**
@@ -42,7 +43,7 @@ class RefreshTokenData extends TokenData
     protected static function validateInput(array $input)
     {
         $validator = Validator::make($input, [
-            'refreshToken' => 'required|string',
+            'token' => 'required|string',
         ]);
 
         if ($validator->fails()) {

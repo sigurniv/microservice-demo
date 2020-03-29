@@ -3,7 +3,7 @@
 namespace App\Infrastructure\Nats\Commands;
 
 use App\Domain\Auth\Action\GetTokenAction;
-use App\Domain\User\DTO\UserData;
+use App\Domain\User\DTO\UserDataDto;
 use App\Domain\User\ViewModel\UserAuthViewModel;
 use App\Infrastructure\Nats\Nats;
 use Illuminate\Console\Command;
@@ -52,7 +52,7 @@ class NatsSubscribe extends Command
                 /** @var  Message $message */
                 try {
                     $request  = new Request(json_decode($message->getBody(), true));
-                    $userAuth = $getTokenAction->handle(UserData::fromRequest($request));
+                    $userAuth = $getTokenAction->handle(UserDataDto::fromRequest($request));
                     $result   = new UserAuthViewModel($userAuth);
                     $message->reply($result->toResponse($request)->getContent());
                 } catch (\Exception $e) {

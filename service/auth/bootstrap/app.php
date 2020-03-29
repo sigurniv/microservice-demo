@@ -41,7 +41,7 @@ $app->singleton(
     App\Exceptions\Handler::class
 );
 
-require_once __DIR__.'/container.php';
+require __DIR__.'/container.php';
 
 /*
 |--------------------------------------------------------------------------

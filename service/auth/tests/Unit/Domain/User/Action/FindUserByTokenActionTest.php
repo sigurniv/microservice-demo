@@ -3,7 +3,7 @@
 namespace Tests\Unit\Domain\User\Action;
 
 
-use App\Domain\Auth\DTO\TokenData;
+use App\Domain\Auth\DTO\TokenDataDto;
 use App\Domain\User\Action\FindUserByTokenAction;
 use App\Domain\User\Model\User;
 use App\Domain\User\Model\UserAuth;
@@ -27,7 +27,7 @@ class FindUserByTokenActionTest extends MockeryDefaultTestCase
     public function testHandleReturnsUser()
     {
         $token                      = 'token';
-        $tokenData                  = new TokenData($token);
+        $tokenData                  = new TokenDataDto($token);
         $userAuth                   = new UserAuth();
         $userAuth->token_expires_at = (new CarbonImmutable())->addDay();
         $user                       = new User([
@@ -45,7 +45,7 @@ class FindUserByTokenActionTest extends MockeryDefaultTestCase
     public function testHandleThrowsExceptionIfAuthNotFound()
     {
         $token                      = 'token';
-        $tokenData                  = new TokenData($token);
+        $tokenData                  = new TokenDataDto($token);
         $userAuth                   = null;
 
         $this->givenUserAuthRepositoryReturnsUserAuth($tokenData, $userAuth);
@@ -58,7 +58,7 @@ class FindUserByTokenActionTest extends MockeryDefaultTestCase
     public function testHandleThrowsExceptionIfAuthIsExpired()
     {
         $token                      = 'token';
-        $tokenData                  = new TokenData($token);
+        $tokenData                  = new TokenDataDto($token);
         $userAuth                   = null;
         $userAuth                   = new UserAuth();
         $userAuth->token_expires_at = (new CarbonImmutable())->subHour();
@@ -70,7 +70,7 @@ class FindUserByTokenActionTest extends MockeryDefaultTestCase
         $result = $action->handle($tokenData);
     }
 
-    protected function givenUserAuthRepositoryReturnsUserAuth(TokenData $tokenData, ?UserAuth $userAuth)
+    protected function givenUserAuthRepositoryReturnsUserAuth(TokenDataDto $tokenData, ?UserAuth $userAuth)
     {
         $this->userAuthRepository
             ->shouldReceive('findByToken')
