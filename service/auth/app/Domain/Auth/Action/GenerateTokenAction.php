@@ -4,6 +4,7 @@ namespace App\Domain\Auth\Action;
 
 
 use App\Domain\Auth\Support\JWT\ITokenGenerator;
+use App\Domain\Auth\VO\Token;
 use Carbon\CarbonImmutable;
 
 class GenerateTokenAction
@@ -15,7 +16,7 @@ class GenerateTokenAction
         $this->tokenGenerator = $tokenGenerator;
     }
 
-    public function handle(string $userId, int $seconds)
+    public function handle(string $userId, int $seconds): Token
     {
         $expirationDate = (new CarbonImmutable())->addSeconds($seconds);
         $payload        = [

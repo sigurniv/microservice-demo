@@ -3,7 +3,7 @@
 namespace App\Domain\Auth\Support\JWT;
 
 
-use App\Domain\Auth\Model\Token;
+use App\Domain\Auth\VO\Token;
 use Carbon\CarbonImmutable;
 use Firebase\JWT\JWT;
 use Illuminate\Config\Repository;
@@ -21,9 +21,9 @@ class JWTTokenGenerator implements ITokenGenerator
 
     public function generate($payload, CarbonImmutable $expirationDate): Token
     {
-        return new Token([
-            'token'      => JWT::encode($payload, $this->key),
-            'expires_at' => $expirationDate
-        ]);
+        return new Token(
+            JWT::encode($payload, $this->key),
+            $expirationDate
+        );
     }
 }

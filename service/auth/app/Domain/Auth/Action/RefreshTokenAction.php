@@ -50,6 +50,5 @@ class RefreshTokenAction
         $user = $this->findUserByTokenAction->handle($refreshTokenData);
 
         return $this->createUserAuthAction->handle($user);
-
     }
 }

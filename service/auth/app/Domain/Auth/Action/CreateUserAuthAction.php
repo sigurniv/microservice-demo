@@ -3,7 +3,7 @@
 namespace App\Domain\Auth\Action;
 
 
-use App\Domain\Auth\Model\Token;
+use App\Domain\Auth\Support\JWT\ITokenGenerator;
 use App\Domain\User\Action\SetUserAuthAction;
 use App\Domain\User\Model\User;
 use App\Domain\User\Model\UserAuth;
@@ -24,15 +24,15 @@ class CreateUserAuthAction
 
     public function handle(User $user): UserAuth
     {
-        $token        = $this->generateTokenAction->handle($user->id, Token::TOKEN_LIFETIME_SECONDS);
-        $refreshToken = $this->generateTokenAction->handle($user->id, Token::REFRESH_TOKEN_LIFETIME_SECONDS);
+        $token        = $this->generateTokenAction->handle($user->id, ITokenGenerator::TOKEN_LIFETIME_SECONDS);
+        $refreshToken = $this->generateTokenAction->handle($user->id, ITokenGenerator::REFRESH_TOKEN_LIFETIME_SECONDS);
 
         $userAuth = $this->setUserAuthAction->handle($user, new UserAuth([
             'user_id'                  => $user->id,
-            'token'                    => $token->token,
-            'token_expires_at'         => $token->expires_at,
-            'refresh_token'            => $refreshToken->token,
-            'refresh_token_expires_at' => $refreshToken->expires_at,
+            'token'                    => $token->getToken(),
+            'token_expires_at'         => $token->getExpiresAt(),
+            'refresh_token'            => $refreshToken->getToken(),
+            'refresh_token_expires_at' => $refreshToken->getExpiresAt(),
         ]));
 
         return $userAuth;
