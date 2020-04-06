@@ -11,4 +11,9 @@ class EloquentUserRepository implements IUserRepository
     {
         return User::where('email', $email)->first();
     }
+
+    public function save(User $user): bool
+    {
+        return $user->save();
+    }
 }

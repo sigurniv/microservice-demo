@@ -22,6 +22,11 @@ class CreateUserAuthAction
         $this->setUserAuthAction   = $setUserAuthAction;
     }
 
+    /**
+     * @param User $user
+     * @return UserAuth
+     * @throws \App\Infrastructure\Exception\InternalErrorException
+     */
     public function handle(User $user): UserAuth
     {
         $token        = $this->generateTokenAction->handle($user->id, ITokenGenerator::TOKEN_LIFETIME_SECONDS);

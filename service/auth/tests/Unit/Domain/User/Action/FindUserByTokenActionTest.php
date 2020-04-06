@@ -10,72 +10,82 @@ use App\Domain\User\Model\UserAuth;
 use App\Domain\User\Repository\IUserAuthRepository;
 use Carbon\CarbonImmutable;
 use Mockery;
+use Tests\fakes\Domain\User\Repository\FakeUserAuthRepository;
 use Tests\MockeryDefaultTestCase;
 
 class FindUserByTokenActionTest extends MockeryDefaultTestCase
 {
-
-    /** @var Mockery\MockInterface */
+    /** @var FakeUserAuthRepository */
     protected $userAuthRepository;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->userAuthRepository = Mockery::mock(IUserAuthRepository::class);
+        $this->userAuthRepository = new FakeUserAuthRepository();
     }
 
+    /**
+     * @throws \App\Http\Exception\ValidationException
+     * @throws \App\Infrastructure\Exception\ErrorMessageException
+     */
     public function testHandleReturnsUser()
     {
         $token                      = 'token';
         $tokenData                  = new TokenDataDto($token);
-        $userAuth                   = new UserAuth();
+        $userAuth                   = new UserAuth(['token' => $token]);
         $userAuth->token_expires_at = (new CarbonImmutable())->addDay();
         $user                       = new User([
             'email' => 'test@gmail.com'
         ]);
         $userAuth->user             = $user;
 
-        $this->givenUserAuthRepositoryReturnsUserAuth($tokenData, $userAuth);
+        $this->givenUserAuthRepositoryReturnsUserAuth($userAuth);
         $action = $this->getFindUserAction();
 
         $result = $action->handle($tokenData);
         $this->assertEquals($user, $result);
     }
 
+    /**
+     * @throws \App\Http\Exception\ValidationException
+     * @throws \App\Infrastructure\Exception\ErrorMessageException
+     */
     public function testHandleThrowsExceptionIfAuthNotFound()
     {
         $token                      = 'token';
         $tokenData                  = new TokenDataDto($token);
         $userAuth                   = null;
 
-        $this->givenUserAuthRepositoryReturnsUserAuth($tokenData, $userAuth);
+        $this->givenUserAuthRepositoryReturnsUserAuth($userAuth);
         $action = $this->getFindUserAction();
 
         $this->expectException(\Exception::class);
         $result = $action->handle($tokenData);
     }
 
+    /**
+     * @throws \App\Http\Exception\ValidationException
+     * @throws \App\Infrastructure\Exception\ErrorMessageException
+     */
     public function testHandleThrowsExceptionIfAuthIsExpired()
     {
         $token                      = 'token';
         $tokenData                  = new TokenDataDto($token);
-        $userAuth                   = null;
-        $userAuth                   = new UserAuth();
+        $userAuth                   = new UserAuth(['token' => $token]);
         $userAuth->token_expires_at = (new CarbonImmutable())->subHour();
 
-        $this->givenUserAuthRepositoryReturnsUserAuth($tokenData, $userAuth);
+        $this->givenUserAuthRepositoryReturnsUserAuth($userAuth);
         $action = $this->getFindUserAction();
 
         $this->expectException(\Exception::class);
         $result = $action->handle($tokenData);
     }
 
-    protected function givenUserAuthRepositoryReturnsUserAuth(TokenDataDto $tokenData, ?UserAuth $userAuth)
+    protected function givenUserAuthRepositoryReturnsUserAuth(?UserAuth $userAuth)
     {
-        $this->userAuthRepository
-            ->shouldReceive('findByToken')
-            ->with($tokenData->token)
-            ->andReturn($userAuth);
+        if ($userAuth) {
+            $this->userAuthRepository->addUserAuth($userAuth);
+        }
     }
 
     protected function getFindUserAction(): FindUserByTokenAction

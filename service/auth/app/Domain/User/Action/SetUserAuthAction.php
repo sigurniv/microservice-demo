@@ -6,6 +6,7 @@ namespace App\Domain\User\Action;
 use App\Domain\User\Model\User;
 use App\Domain\User\Model\UserAuth;
 use App\Domain\User\Repository\IUserAuthRepository;
+use App\Infrastructure\Exception\InternalErrorException;
 
 class SetUserAuthAction
 {
@@ -16,6 +17,12 @@ class SetUserAuthAction
         $this->userAuthRepository = $userAuthRepository;
     }
 
+    /**
+     * @param User $user
+     * @param UserAuth $userAuth
+     * @return UserAuth|null
+     * @throws InternalErrorException
+     */
     public function handle(User $user, UserAuth $userAuth): ?UserAuth
     {
         $auths = $this->userAuthRepository->getUserAuths($user);
@@ -23,7 +30,10 @@ class SetUserAuthAction
             $this->userAuthRepository->deleteAuths($user);
         }
 
-        $userAuth = $this->userAuthRepository->addUserAuth($user, $userAuth);
+        $result = $this->userAuthRepository->addUserAuth($userAuth);
+        if (!$result) {
+            throw new InternalErrorException('failed to add user auth');
+        }
         return $userAuth ?? null;
     }
 }

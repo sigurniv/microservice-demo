@@ -27,6 +27,7 @@ class GetTokenAction
      * @param UserDataDto $userData
      * @return UserAuth
      * @throws ErrorMessageException
+     * @throws \App\Infrastructure\Exception\InternalErrorException
      */
     public function handle(UserDataDto $userData): UserAuth
     {

@@ -19,9 +19,9 @@ class EloquentUserAuthRepository implements IUserAuthRepository
         return $user->auths()->delete();
     }
 
-    public function addUserAuth(User $user, UserAuth $userAuth)
+    public function addUserAuth(UserAuth $userAuth): bool
     {
-        return $user->auths()->save($userAuth);
+        return $userAuth->save();
     }
 
     public function findByToken(string $token): ?UserAuth

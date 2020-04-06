@@ -9,6 +9,7 @@ use App\Http\Exception\ValidationException;
 use App\Http\Response\IResponder;
 use App\Http\Response\Responder;
 use App\Infrastructure\Exception\ErrorMessageException;
+use App\Infrastructure\Exception\InternalErrorException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -73,6 +74,10 @@ class Handler extends ExceptionHandler
                     new ApiErrResponse(new ApiResponseError(trans($exception->getMessage()), $exception->getCode()))
                 );
 
+            case InternalErrorException::class:
+                return $responder->respond(
+                    new ApiErrResponse(new ApiResponseError('internal error', $exception->getCode()))
+                );
             default:
                 return parent::render($request, $exception);
         }

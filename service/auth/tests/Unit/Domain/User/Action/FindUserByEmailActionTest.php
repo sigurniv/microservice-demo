@@ -9,25 +9,29 @@ use App\Domain\User\Repository\IUserRepository;
 use App\Domain\User\Model\User;
 use Illuminate\Support\Facades\Hash;
 use Mockery;
+use Tests\fakes\Domain\User\Repository\FakeUserRepository;
 use Tests\MockeryDefaultTestCase;
 
 class FindUserByEmailActionTest extends MockeryDefaultTestCase
 {
-    /** @var Mockery\MockInterface */
+    /** @var FakeUserRepository */
     protected $userRepository;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->userRepository = Mockery::mock(IUserRepository::class);
+        $this->userRepository = new FakeUserRepository();
     }
 
+    /**
+     * @throws \App\Http\Exception\ValidationException
+     */
     public function testHandleChecksPassword()
     {
         $email    = 'test@gmail.com';
         $password = 'password';
-        $user     = new User(['email' => 'email', 'password' => Hash::make('213')]);
-        $this->givenUserRepositoryFindByEmailReturnsUser($email, $user);
+        $user     = new User(['email' => $email, 'password' => Hash::make('213')]);
+        $this->givenUserRepositoryFindByEmailReturnsUser($user);
 
         $userData = new UserDataDto($email, $password);
         $action = $this->getFindUserAction();
@@ -36,12 +40,15 @@ class FindUserByEmailActionTest extends MockeryDefaultTestCase
         $this->assertNull($result);
     }
 
+    /**
+     * @throws \App\Http\Exception\ValidationException
+     */
     public function testHandleReturnsUser()
     {
         $email    = 'test@gmail.com';
         $password = 'password';
-        $user     = new User(['email' => 'test', 'password' => Hash::make($password)]);
-        $this->givenUserRepositoryFindByEmailReturnsUser($email, $user);
+        $user     = new User(['email' => $email, 'password' => Hash::make($password)]);
+        $this->givenUserRepositoryFindByEmailReturnsUser($user);
 
         $userData = new UserDataDto($email, $password);
         $action = $this->getFindUserAction();
@@ -50,12 +57,9 @@ class FindUserByEmailActionTest extends MockeryDefaultTestCase
         $this->assertEquals($user, $result);
     }
 
-    protected function givenUserRepositoryFindByEmailReturnsUser(string $email, User $user)
+    protected function givenUserRepositoryFindByEmailReturnsUser(User $user)
     {
-        $this->userRepository
-            ->shouldReceive('findByEmail')
-            ->with($email)
-            ->andReturn($user);
+       $this->userRepository->save($user);
     }
 
     protected function getFindUserAction(): FindUserByEmailAction

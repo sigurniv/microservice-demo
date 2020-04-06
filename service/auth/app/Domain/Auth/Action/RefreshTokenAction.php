@@ -28,10 +28,10 @@ class RefreshTokenAction
     }
 
     /**
-     * @param User $user
      * @param RefreshTokenDataDto $refreshTokenData
      * @return UserAuth
      * @throws ErrorMessageException
+     * @throws \App\Infrastructure\Exception\InternalErrorException
      */
     public function handle(RefreshTokenDataDto $refreshTokenData)
     {
@@ -48,7 +48,6 @@ class RefreshTokenAction
         }
 
         $user = $this->findUserByTokenAction->handle($refreshTokenData);
-
         return $this->createUserAuthAction->handle($user);
     }
 }

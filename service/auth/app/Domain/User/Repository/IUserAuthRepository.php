@@ -13,7 +13,7 @@ interface IUserAuthRepository
 
     public function deleteAuths(User $user);
 
-    public function addUserAuth(User $user, UserAuth $userAuth);
+    public function addUserAuth(UserAuth $userAuth): bool;
 
     public function findByToken(string $token): ?UserAuth;
 
