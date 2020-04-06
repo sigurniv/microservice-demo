@@ -9,7 +9,7 @@ import (
 )
 
 type MockBus struct {
-	PublishFunc func(subj string, data []byte) error
+	PublishFunc     func(subj string, data []byte) error
 	PublishFuncData []byte
 }
 
@@ -18,7 +18,11 @@ func (bus MockBus) Publish(subj string, data []byte) error {
 }
 
 type MockArtistService struct {
-	SearchMultipleFunc func (names string) ([]byte, error)
+	SearchMultipleFunc func(names string) ([]byte, error)
+}
+
+func (service MockArtistService) GetArtist(name string) ([]byte, error) {
+	panic("implement me")
 }
 
 func (service MockArtistService) SearchMultiple(names string) ([]byte, error) {
@@ -29,8 +33,6 @@ func TestNatsHandler_SearchArtistMultiple(t *testing.T) {
 	logger := logrus.New()
 	logger.Out = ioutil.Discard
 
-	natsHandler := NewNatsHandler(logger)
-
 	artists := []byte("123")
 	mockBus := MockBus{}
 	mockBus.PublishFunc = func(subj string, data []byte) error {
@@ -38,12 +40,14 @@ func TestNatsHandler_SearchArtistMultiple(t *testing.T) {
 		return nil
 	}
 
+	natsHandler := NewNatsHandler(logger, mockBus)
+
 	mockArtistService := MockArtistService{}
-	mockArtistService.SearchMultipleFunc = func (names string) ([]byte, error) {
+	mockArtistService.SearchMultipleFunc = func(names string) ([]byte, error) {
 		return artists, nil
 	}
 
-	handler := natsHandler.SearchArtistMultiple(mockBus, mockArtistService)
+	handler := natsHandler.SearchArtistMultiple(mockArtistService)
 
 	m := nats.Msg{}
 	handler(&m)
