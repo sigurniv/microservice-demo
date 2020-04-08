@@ -10,7 +10,5 @@ WORKDIR /app/service
 COPY --from=build-env /src/service/service /app/service
 ADD ./config.yaml /app/service/config.yaml
 
-#RUN echo $(ls -lh /app/currency_rate)
 EXPOSE 8080
-#RUN chmod +x /app/nats-chat
 CMD ["/app/service/service", "--config", "/app/service"]
