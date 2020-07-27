@@ -1,6 +1,5 @@
 package server
 
-
 type InfoData struct {
 	Name string `json:"name"`
 }
