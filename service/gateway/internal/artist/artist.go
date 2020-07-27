@@ -47,8 +47,7 @@ func (s *Service) getTopArtistNames(tag string) (string, error) {
 	}
 
 	var artists []Artist
-	err = json.Unmarshal(response.Data, &artists)
-	if err != nil {
+	if err = json.Unmarshal(response.Data, &artists); err != nil {
 		return "", err
 	}
 
@@ -68,8 +67,7 @@ func (s *Service) GetArtist(name string) ([]byte, error) {
 	}
 
 	var artist Artist
-	err = json.Unmarshal(response.Data, &artist)
-	if err != nil {
+	if err = json.Unmarshal(response.Data, &artist); err != nil {
 		return []byte{}, err
 	}
 
