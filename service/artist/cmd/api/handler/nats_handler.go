@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"github.com/nats-io/nats.go"
 	"github.com/sigurniv/metalhead/service/artist/artist"
-	"github.com/sigurniv/metalhead/service/artist/bus"
+	"github.com/sigurniv/metalhead/service/artist/internal/platform/bus"
 	"github.com/sigurniv/metalhead/service/artist/response"
 	"github.com/sirupsen/logrus"
 )

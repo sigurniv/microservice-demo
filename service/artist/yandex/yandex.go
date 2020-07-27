@@ -3,7 +3,7 @@ package yandex
 import (
 	"encoding/json"
 	"errors"
-	"github.com/sigurniv/metalhead/service/artist/restclient"
+	"github.com/sigurniv/metalhead/service/artist/internal/platform/restclient"
 	"github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net/http"

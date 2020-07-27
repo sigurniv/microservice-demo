@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/sigurniv/metalhead/service/artist/artist"
-	"github.com/sigurniv/metalhead/service/artist/config"
+	"github.com/sigurniv/metalhead/service/artist/internal/platform/config"
 	"github.com/sigurniv/metalhead/service/artist/response"
 	"github.com/sigurniv/metalhead/service/artist/yandex"
 	"github.com/sirupsen/logrus"
