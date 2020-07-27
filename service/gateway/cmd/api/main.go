@@ -9,6 +9,8 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"log"
+	"net/http"
+	_ "net/http/pprof" //Register debug/pprof handlers
 	"os"
 	"os/signal"
 	"path/filepath"
@@ -25,6 +27,14 @@ func main() {
 
 	logger := logrus.New()
 	logger.Out = os.Stdout
+
+	//Start debug server
+	go func() {
+		debugPort := c.GetString("debug.port")
+		logger.Printf("main: Debug service listening on %s", debugPort)
+		err := http.ListenAndServe(":" + debugPort, http.DefaultServeMux)
+		logger.Printf("main: Debug service ended %v", err)
+	}()
 
 	application, err := app.New(c, logger)
 	if err != nil {

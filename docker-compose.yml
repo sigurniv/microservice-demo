@@ -61,7 +61,13 @@ services:
     restart: always
     environment:
       server.port: "8080"
+      debug.port: &debug-port "6060"
       nats.uri: "nats://nats:${NATS_PORT}"
+    ports:
+      - target: 6060
+        published: *debug-port
+        protocol: tcp
+        mode: host
     depends_on:
       - nats
       - artist
