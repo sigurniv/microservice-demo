@@ -1,6 +1,0 @@
-server:
-  port: 8092
-
-service:
-  name: "gateway"
-
