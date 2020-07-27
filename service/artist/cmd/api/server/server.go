@@ -4,11 +4,11 @@ import (
 	"context"
 	"errors"
 	"github.com/gorilla/mux"
-	"github.com/sigurniv/metalhead/service/artist/artist"
 	"github.com/sigurniv/metalhead/service/artist/cmd/api/handler"
+	"github.com/sigurniv/metalhead/service/artist/internal/artist"
 	"github.com/sigurniv/metalhead/service/artist/internal/platform/bus"
 	"github.com/sigurniv/metalhead/service/artist/internal/platform/config"
-	"github.com/sigurniv/metalhead/service/artist/yandex"
+	"github.com/sigurniv/metalhead/service/artist/internal/yandex"
 	"github.com/sirupsen/logrus"
 	"net/http"
 )

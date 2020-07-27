@@ -3,10 +3,10 @@ package handler
 import (
 	"encoding/json"
 	"errors"
-	"github.com/sigurniv/metalhead/service/artist/artist"
+	"github.com/sigurniv/metalhead/service/artist/internal/artist"
 	"github.com/sigurniv/metalhead/service/artist/internal/platform/config"
-	"github.com/sigurniv/metalhead/service/artist/response"
-	"github.com/sigurniv/metalhead/service/artist/yandex"
+	"github.com/sigurniv/metalhead/service/artist/internal/response"
+	"github.com/sigurniv/metalhead/service/artist/internal/yandex"
 	"github.com/sirupsen/logrus"
 	"net/http"
 )

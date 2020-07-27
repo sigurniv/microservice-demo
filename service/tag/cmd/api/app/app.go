@@ -3,8 +3,8 @@ package app
 import (
 	"context"
 	"fmt"
-	"github.com/sigurniv/metalhead/service/tag/config"
-	"github.com/sigurniv/metalhead/service/tag/server"
+	"github.com/sigurniv/metalhead/service/tag/cmd/api/server"
+	"github.com/sigurniv/metalhead/service/tag/internal/platform/config"
 	"github.com/sirupsen/logrus"
 )
 

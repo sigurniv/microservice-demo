@@ -3,10 +3,10 @@ package handler
 import (
 	"encoding/json"
 	"github.com/nats-io/nats.go"
-	"github.com/sigurniv/metalhead/service/tag/bus"
-	"github.com/sigurniv/metalhead/service/tag/lastfm"
-	"github.com/sigurniv/metalhead/service/tag/response"
-	"github.com/sigurniv/metalhead/service/tag/tag"
+	"github.com/sigurniv/metalhead/service/tag/internal/lastfm"
+	"github.com/sigurniv/metalhead/service/tag/internal/platform/bus"
+	"github.com/sigurniv/metalhead/service/tag/internal/response"
+	"github.com/sigurniv/metalhead/service/tag/internal/tag"
 	"github.com/sirupsen/logrus"
 )
 

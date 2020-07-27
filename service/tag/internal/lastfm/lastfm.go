@@ -3,7 +3,7 @@ package lastfm
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/sigurniv/metalhead/service/tag/config"
+	"github.com/sigurniv/metalhead/service/tag/internal/platform/config"
 	"io/ioutil"
 	"net/http"
 )

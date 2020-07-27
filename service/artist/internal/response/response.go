@@ -1,7 +1,7 @@
 package response
 
 import (
-	"github.com/sigurniv/metalhead/service/artist/yandex"
+	"github.com/sigurniv/metalhead/service/artist/internal/yandex"
 )
 
 type InfoData struct {

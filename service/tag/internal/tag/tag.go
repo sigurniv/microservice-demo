@@ -2,8 +2,8 @@ package tag
 
 import (
 	"encoding/json"
-	"github.com/sigurniv/metalhead/service/tag/lastfm"
-	"github.com/sigurniv/metalhead/service/tag/response"
+	"github.com/sigurniv/metalhead/service/tag/internal/lastfm"
+	"github.com/sigurniv/metalhead/service/tag/internal/response"
 )
 
 func List(lastFm lastfm.ILastFm) ([]byte, error) {

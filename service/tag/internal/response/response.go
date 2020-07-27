@@ -1,6 +1,6 @@
 package response
 
-import "github.com/sigurniv/metalhead/service/tag/lastfm"
+import "github.com/sigurniv/metalhead/service/tag/internal/lastfm"
 
 type InfoData struct {
 	Name string `json:"name"`

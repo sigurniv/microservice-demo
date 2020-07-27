@@ -2,8 +2,8 @@ package handler
 
 import (
 	"encoding/json"
-	"github.com/sigurniv/metalhead/service/tag/lastfm"
-	"github.com/sigurniv/metalhead/service/tag/response"
+	"github.com/sigurniv/metalhead/service/tag/internal/lastfm"
+	"github.com/sigurniv/metalhead/service/tag/internal/response"
 	"github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net/http"

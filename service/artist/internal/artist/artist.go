@@ -2,8 +2,8 @@ package artist
 
 import (
 	"encoding/json"
-	"github.com/sigurniv/metalhead/service/artist/response"
-	"github.com/sigurniv/metalhead/service/artist/yandex"
+	"github.com/sigurniv/metalhead/service/artist/internal/response"
+	"github.com/sigurniv/metalhead/service/artist/internal/yandex"
 	"strings"
 )
 

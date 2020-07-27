@@ -3,10 +3,10 @@ package handler
 import (
 	"encoding/json"
 	"errors"
-	"github.com/sigurniv/metalhead/service/tag/config"
-	"github.com/sigurniv/metalhead/service/tag/lastfm"
-	"github.com/sigurniv/metalhead/service/tag/response"
-	"github.com/sigurniv/metalhead/service/tag/tag"
+	"github.com/sigurniv/metalhead/service/tag/internal/lastfm"
+	"github.com/sigurniv/metalhead/service/tag/internal/platform/config"
+	"github.com/sigurniv/metalhead/service/tag/internal/response"
+	"github.com/sigurniv/metalhead/service/tag/internal/tag"
 	"github.com/sirupsen/logrus"
 	"net/http"
 )
