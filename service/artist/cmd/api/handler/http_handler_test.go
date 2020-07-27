@@ -2,9 +2,9 @@ package handler
 
 import (
 	"encoding/json"
-	"github.com/sigurniv/metalhead/service/artist/artist"
-	"github.com/sigurniv/metalhead/service/artist/response"
-	"github.com/sigurniv/metalhead/service/artist/yandex"
+	"github.com/sigurniv/metalhead/service/artist/internal/artist"
+	"github.com/sigurniv/metalhead/service/artist/internal/response"
+	"github.com/sigurniv/metalhead/service/artist/internal/yandex"
 	"github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net/http"

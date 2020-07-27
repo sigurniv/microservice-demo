@@ -18,6 +18,7 @@ type Server struct {
 	logger  *logrus.Logger
 	config  config.Config
 	Handler *Handler
+	Router  *mux.Router
 }
 
 func New(config config.Config, logger *logrus.Logger) (*Server, error) {
@@ -50,7 +51,15 @@ func New(config config.Config, logger *logrus.Logger) (*Server, error) {
 	router.HandleFunc("/api/v1/auth/token/", handler.getToken(serviceBus))
 	http.Handle("/", router)
 
+	srv.Router = router
+
 	return srv, err
+}
+
+func (s *Server) AddMiddleware(mw ...mux.MiddlewareFunc) {
+	for _, mw := range mw {
+		s.Router.Use(mw)
+	}
 }
 
 func (s *Server) Run() {

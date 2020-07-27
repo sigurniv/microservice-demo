@@ -2,9 +2,11 @@ package main
 
 import (
 	"context"
+	_ "expvar" //Register debug/vars handler
 	"flag"
 	"fmt"
 	"github.com/sigurniv/metalhead/service/gateway/cmd/api/internal/app"
+	"github.com/sigurniv/metalhead/service/gateway/internal/middleware"
 	"github.com/sigurniv/metalhead/service/gateway/internal/platform/config"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -32,7 +34,7 @@ func main() {
 	go func() {
 		debugPort := c.GetString("debug.port")
 		logger.Printf("main: Debug service listening on %s", debugPort)
-		err := http.ListenAndServe(":" + debugPort, http.DefaultServeMux)
+		err := http.ListenAndServe(":"+debugPort, http.DefaultServeMux)
 		logger.Printf("main: Debug service ended %v", err)
 	}()
 
@@ -40,6 +42,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
+
+	application.Server.AddMiddleware(middleware.Metrics())
 
 	application.Run()
 
